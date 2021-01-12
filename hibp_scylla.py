@@ -74,7 +74,7 @@ def breach(email, scylla):
 			domain = result['Domain']
 			breachDate = result['BreachDate']
 			sensitive = result['IsSensitive']
-			print('\tAccount: %s\n\tBreach: %s\n\tSensitive: %s\n\tDomain: %s\n\tBreach Date:%s\n\t'%(email,breach,sensitive,domain,breachDate))
+			print(f"\tAccount: {email}\n\tBreach: {breach}\n\tSensitive: {sensitive}\n\tDomain: {domain}\n\tBreach Date:{breachDate}\n\t")
 		if scylla == True:
 			# Scylla.sh API:
 			your_lucene_query = "email:" + email
