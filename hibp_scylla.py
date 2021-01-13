@@ -7,6 +7,8 @@
 # Requirements:
 #	https://haveibeenpwned.com/API/Key
 #		You need a key, so you can procure one here with an email address and $3.50 per month.
+#		Update line 63 with your API Key.
+#	Create your unique user-agent for the hibp requests: line 62.
 
 import json
 import os
@@ -57,7 +59,7 @@ headers = {}
 #HIBP API:
 headers['content-type']= 'application/json'
 headers['api-version']= '3'
-headers['user-agent']= 'grnbeltwarrior'
+headers['user-agent']= 'make-individual-user-agent'
 headers['hibp-api-key']= 'https://haveibeenpwned.com/API/Key'
 
 def breach(email, scylla):
