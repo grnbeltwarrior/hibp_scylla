@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
 # Have I been pwned with option to lookup on scylla.sh
 # Test email: rudolphthered@hotmail.com, this was used in TryHackMe's Advent of Cyber 2.
@@ -57,12 +57,16 @@ headers = {}
 #HIBP API:
 headers['content-type']= 'application/json'
 headers['api-version']= '3'
-headers['user-agent']= '<grnbeltwarrior>'
+headers['user-agent']= 'grnbeltwarrior'
 headers['hibp-api-key']= 'https://haveibeenpwned.com/API/Key'
 
 def breach(email, scylla):
 	url = 'https://haveibeenpwned.com/api/v3/breachedaccount/'+email+'?truncateResponse=false'
-	response = requests.get(url, headers=headers)
+	try:
+		response = requests.get(url, headers=headers)
+	except:
+		print("We were unable to connect.")
+		exit()
 	if response.status_code == 404:
 		print(f"{email} was not found in a breach.")
 	elif response.status_code == 200:
@@ -77,22 +81,37 @@ def breach(email, scylla):
 			print(f"\tAccount: {email}\n\tBreach: {breach}\n\tSensitive: {sensitive}\n\tDomain: {domain}\n\tBreach Date:{breachDate}\n\t")
 		if scylla == True:
 			# Scylla.sh API:
+			print("Checking Scylla.sh")
 			your_lucene_query = "email:" + email
 			payload = {'q': your_lucene_query, 'size': '100', 'start': '0'}
 			r = requests.get('https://scylla.sh/search', params=payload)
 			scylla_data = r.json()
 			if scylla_data:
 				for scylla_result in scylla_data:
-					domain = scylla_result['fields']['domain']
-					email = scylla_result['fields']['email']
-					password = scylla_result['fields']['password']
-					print(f"Scylla Result for: {email} from: {domain} with a password of: {password}\n")
+					try:
+						domain = scylla_result['fields']['domain']
+					except:
+						domain = ""
+					try:
+						email = scylla_result['fields']['email']
+					except:
+						email = ""
+					# Never underestimate an empty password
+					try:
+						password = scylla_result['fields']['password']
+					except:
+						password = ""
+					if password == "":
+						print(f"Scylla Result for: {email} from: {domain} with no password recorded.")
+					else:
+						print(f"Scylla Result for: {email} from: {domain} with a password of: {password}")
 			else:
 				print(f"No Scylla entries for {email}")
 			print(f"\n\n")
 
 if __name__ == '__main__':
 	how2use()
+	print(args)
 	if headers['hibp-api-key']=='https://haveibeenpwned.com/API/Key':
 		print(f"The API Key was not correctly set, it costs $3.50 per month, at the time of this scripts creation.\nRegister @ {headers['hibp-api-key']}")
 		exit()
