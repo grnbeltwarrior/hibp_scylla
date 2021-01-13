@@ -58,7 +58,7 @@ headers = {}
 headers['content-type']= 'application/json'
 headers['api-version']= '3'
 headers['user-agent']= 'grnbeltwarrior'
-#headers['hibp-api-key']= 'https://haveibeenpwned.com/API/Key'
+headers['hibp-api-key']= 'https://haveibeenpwned.com/API/Key'
 
 def breach(email, scylla):
 	url = 'https://haveibeenpwned.com/api/v3/breachedaccount/'+email+'?truncateResponse=false'
