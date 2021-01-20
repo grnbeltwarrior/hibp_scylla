@@ -2,7 +2,7 @@
 
 # Have I been pwned with option to lookup on scylla.sh
 # Test email: rudolphthered@hotmail.com, this was used in TryHackMe's Advent of Cyber 2.
-# Like this: https://scylla.sh/search/?q=email:rudolphthered@hotmail.com
+# Like this: https://scylla.so/search/?q=email:rudolphthered@hotmail.com
 
 # Requirements:
 #	https://haveibeenpwned.com/API/Key
@@ -40,7 +40,7 @@ def how2use():
 ap = argparse.ArgumentParser()
 ap.add_argument("-e", "--email", required=False, help="Search for a single email.")
 ap.add_argument("-f", "--file", required=False, help="Grab emails from a list of emails: -f /path/to/file.txt")
-ap.add_argument("-s", "--scylla", action="store_true", required=False, help="Used to query Scylla.sh API for password.")
+ap.add_argument("-s", "--scylla", action="store_true", required=False, help="Used to query Scylla.so API for password.")
 args = vars(ap.parse_args())
 
 if args['email']:
@@ -83,10 +83,10 @@ def breach(email, scylla):
 			print(f"\tAccount: {email}\n\tBreach: {breach}\n\tSensitive: {sensitive}\n\tDomain: {domain}\n\tBreach Date:{breachDate}\n\t")
 		if scylla == True:
 			# Scylla.sh API:
-			print("Checking Scylla.sh")
+			print("Checking Scylla.so")
 			your_lucene_query = "email:" + email
 			payload = {'q': your_lucene_query, 'size': '100', 'start': '0'}
-			r = requests.get('https://scylla.sh/search', params=payload)
+			r = requests.get('https://scylla.so/search', params=payload)
 			scylla_data = r.json()
 			if scylla_data:
 				for scylla_result in scylla_data:
